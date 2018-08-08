@@ -32,6 +32,7 @@
                 android:src="@drawable/photo" />
             <!--Name-->
             <EditText
+                android:id="@+id/edtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/textfield_name"
@@ -39,13 +40,15 @@
                 android:inputType="text" />
             <!--User-->
             <EditText
+                android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/textfield_email"
                 android:hint="Email :"
-                android:inputType="text" />
+                android:inputType="textEmailAddress" />
             <!--Password-->
             <EditText
+                android:id="@+id/edtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/textfield_password"

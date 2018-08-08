@@ -15,17 +15,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import masterung.androidthai.in.th.laosunseen.MainActivity;
 import masterung.androidthai.in.th.laosunseen.R;
+import masterung.androidthai.in.th.laosunseen.utility.MyAlert;
 
-public class RegisterFragment extends Fragment{
+public class RegisterFragment extends Fragment {
 
     //    Explicit
     private Uri uri;
     private ImageView imageView;
+    private boolean aBoolean = true;
 
 
     @Override
@@ -52,10 +55,43 @@ public class RegisterFragment extends Fragment{
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.itemUpload) {
+            uploadProcess();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void uploadProcess() {
+
+        EditText nameEditText = getView().findViewById(R.id.edtName);
+        EditText emailEditText = getView().findViewById(R.id.edtEmail);
+        EditText passwordEditText = getView().findViewById(R.id.edtPassword);
+
+//        Get Value From EditText
+
+        String nameString = nameEditText.getText().toString().trim();
+        String emailString = emailEditText.getText().toString().trim();
+        String passwordString = passwordEditText.getText().toString().trim();
+
+//        check Choose Photo
+        if (aBoolean) {
+//           Non Choose Photo
+            MyAlert myAlert = new MyAlert(getActivity());
+            myAlert.normalDialog("Non Choose Photo", "Please Choose Photo");
+
+        } else if (nameString.isEmpty() || emailString.isEmpty() || passwordString.isEmpty()) {
+
+//            Have Space
+            MyAlert myAlert = new MyAlert(getActivity());
+            myAlert.normalDialog("Have Space",
+                    "Please Fill All Every Blank");
+
+        } else {
+
+//            No Space
+
+        }
     }
 
     @Override
@@ -65,6 +101,8 @@ public class RegisterFragment extends Fragment{
         if (resultCode == getActivity().RESULT_OK) {
 
             uri = data.getData();
+            aBoolean = false;
+
             try {
 
                 Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri));
@@ -86,28 +124,28 @@ public class RegisterFragment extends Fragment{
 
     private void photoController() {
         imageView = getView().findViewById(R.id.imvPhoto);
-        imageView.setOnClickListener(new View.OnClickListener(){
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/*");
-                startActivityForResult(Intent.createChooser(intent, "Please Choose APP" ),1);
+                startActivityForResult(Intent.createChooser(intent, "Please Choose APP"), 1);
             }
         });
     }
 
     private void createToolbar() {
         Toolbar toolbar = getView().findViewById(R.id.toolbarRegister);
-        ((MainActivity)getActivity()).setSupportActionBar(toolbar);
+        ((MainActivity) getActivity()).setSupportActionBar(toolbar);
         ((MainActivity) getActivity()).getSupportActionBar().setTitle("Register");
         ((MainActivity) getActivity()).getSupportActionBar().setSubtitle("Please Choose Photo and Fill All Black");
         ((MainActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener(){
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
         setHasOptionsMenu(true);
