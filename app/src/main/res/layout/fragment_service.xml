@@ -3,36 +3,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-   <!--List Friend-->
-    <LinearLayout
+    <!--List Friend-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewUser"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/LinearBottom"></LinearLayout>
+        android:layout_above="@+id/linearBottom" />
 
     <!--Post-->
     <LinearLayout
-        android:id="@+id/LinearBottom"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
+        android:id="@+id/linearBottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
-    <!--TextField-->
-      <EditText
-          android:id="@+id/edtPost"
-          android:inputType="text"
-          android:hint="Your Post"
-          android:layout_weight="4"
-          android:layout_width="0dp"
-          android:layout_height="wrap_content" />
+        <!--TextField-->
+        <EditText
+            android:id="@+id/edtPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:hint="Your Post"
+            android:inputType="text" />
 
-    <!--buttom-->
-    <Button
-        android:id="@+id/btnPost"
-        android:background="@drawable/bg_bottom"
-        android:text="Post"
-        android:layout_weight="1.5"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+        <!--Button-->
+        <Button
+            android:id="@+id/btnPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:background="@drawable/bg_bottom"
+            android:text="Post" />
+
+    </LinearLayout>
+
 </RelativeLayout>

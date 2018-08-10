@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,9 +25,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import masterung.androidthai.in.th.laosunseen.MainActivity;
 import masterung.androidthai.in.th.laosunseen.R;
 import masterung.androidthai.in.th.laosunseen.utility.MyAlert;
+import masterung.androidthai.in.th.laosunseen.utility.ServiceAdapter;
+import masterung.androidthai.in.th.laosunseen.utility.UserModel;
 
 public class ServiceFragment extends Fragment{
 
@@ -46,7 +45,60 @@ public class ServiceFragment extends Fragment{
 //      Post Conlroller
         postConlroller();
 
+//        Create RecyclerView
+        createRecyclerView();
+
+
     } //    Main Method
+    private void createRecyclerView(){
+        final RecyclerView recyclerView = getView().findViewById(R.id.recyclerViewUser);
+        final int[] countInts = new int[]{0};
+
+        final ArrayList<String> photoStringArrayList = new ArrayList<>();
+        final ArrayList<String> nameStringArrayList = new ArrayList<>();
+        final ArrayList<String> postStringArrayList = new ArrayList<>();
+
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child("User");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                int i = (int) dataSnapshot.getChildrenCount();
+                ArrayList<UserModel> modelArrayList = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+
+                    UserModel userModel = dataSnapshot1.getValue(UserModel.class);
+                    modelArrayList.add(userModel);
+
+                    UserModel userModel1 = modelArrayList.get(countInts[0]);
+                    countInts[0] += 1;
+
+                    photoStringArrayList.add(userModel1.getPathUrlString());
+                    nameStringArrayList.add(userModel1.getNameString());
+                    postStringArrayList.add(userModel1.getMyPostString());
+
+
+                } // for
+                ServiceAdapter serviceAdapter = new ServiceAdapter(getActivity(),
+                        photoStringArrayList, nameStringArrayList, postStringArrayList);
+
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(),
+                        LinearLayoutManager.VERTICAL, false);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                recyclerView.setAdapter(serviceAdapter);
+
+            } // dataChange
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     private void findMyMe() {
 
@@ -93,6 +145,7 @@ public class ServiceFragment extends Fragment{
                             "Please Type on Post");
                 }else {
                     editCurrentPost(postString);
+                    editText.setText("");
                 }
 
             }
